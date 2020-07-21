@@ -1,33 +1,28 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public float dumping = 1.5f;
-    public Vector2 offset = new Vector2(2f, 1f);
-    public bool isLeft;
-    private Transform player;
-    private int lastX;
+    public Vector3 cameraOffset;
+  
+    private Transform playerTransform;
+
+    [Range(0.01f, 1.0f)]
+    public float SmoothFactor = 0.5f;
+    
+    
 
     void Start()
     {
-        // offset = new Vector2(Mathf.Abs(offset.x), offset.y);
-        // FindPlayer(isLeft);
+        cameraOffset = transform.position - playerTransform.position;
     }
 
-    // public void isLeft(bool playerIsLeft)
-    // {
-        // player = GameObject.FindGameObjectWithTag("Player").transform;
-        // lastX = Mathf.RoundToInt(player.position.x);
-        //
-        // if (playerIsLeft)
-        // {
-        //     transform.position = new Vector3(player.position.x);
-        // }
-        // else
-        // {
-        //     transform.position = new Vector3();
-        // }
-    // }
+    void Update()
+    {
+        Vector3 newPossition = playerTransform.position + cameraOffset;
+
+        transform.position = Vector3.Slerp(transform.position, newPossition, SmoothFactor);
+    }
 }
